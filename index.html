@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H2 2026 Energy Storage Price Book</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f3; color: #1a1a18; padding: 2rem 1rem; font-size: 16px; line-height: 1.5; }
+  .wrap { max-width: 920px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 500; margin-bottom: 5px; }
+  label { font-size: 13px; color: #666; display: block; margin-bottom: 6px; }
+  .card { background: #fff; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  input[type=number], input[type=text] { width: 100%; padding: 7px 10px; border: 0.5px solid rgba(0,0,0,0.2); border-radius: 8px; font-size: 13px; color: #1a1a18; background: #fff; outline: none; font-family: inherit; }
+  input[type=number]:focus, input[type=text]:focus { border-color: rgba(0,0,0,0.4); box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
+  input[type=range] { flex: 1; accent-color: #1a1a18; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .divider { border: none; border-top: 0.5px solid rgba(0,0,0,0.1); margin: 1rem 0; }
+  .tbadge { display: inline-block; font-size: 11px; padding: 2px 9px; border-radius: 8px; font-weight: 500; }
+  .t-cn   { background: #FAECE7; color: #993C1D; }
+  .t-feoc { background: #E6F1FB; color: #185FA5; }
+  .t-dc   { background: #EAF3DE; color: #3B6D11; }
+  .sbadge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500; border: 0.5px solid; }
+  .s-dc { background: #F1EFE8; color: #444441; border-color: #B4B2A9; }
+  .s-ac { background: #EEEDFE; color: #3C3489; border-color: #AFA9EC; }
+  .risk-low  { font-size: 10px; padding: 1px 6px; border-radius: 99px; background: #EAF3DE; color: #3B6D11; border: 0.5px solid #97C459; white-space: nowrap; }
+  .risk-med  { font-size: 10px; padding: 1px 6px; border-radius: 99px; background: #FAEEDA; color: #854F0B; border: 0.5px solid #EF9F27; white-space: nowrap; }
+  .risk-high { font-size: 10px; padding: 1px 6px; border-radius: 99px; background: #FAECE7; color: #993C1D; border: 0.5px solid #F0997B; white-space: nowrap; }
+  .seg-tabs { display: flex; border: 0.5px solid rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; width: fit-content; }
+  .seg-tab  { font-size: 13px; padding: 6px 18px; cursor: pointer; background: transparent; color: #666; border: none; border-right: 0.5px solid rgba(0,0,0,0.15); font-family: inherit; }
+  .seg-tab:last-child { border-right: none; }
+  .seg-tab.active { background: #1a1a18; color: #fff; }
+  .seg-tab:hover:not(.active) { background: #f5f5f3; }
+  .year-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ytab { font-size: 13px; padding: 4px 13px; border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.2); cursor: pointer; background: transparent; color: #666; font-family: inherit; }
+  .ytab.active { background: #1a1a18; color: #fff; border-color: #1a1a18; }
+  .ytab:hover:not(.active) { background: #f5f5f3; }
+  .tracks-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-bottom: 1rem; }
+  .track-card { background: #fff; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 1rem; }
+  .scope-tabs { display: flex; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 8px; overflow: hidden; width: fit-content; margin: 8px 0; }
+  .stab { font-size: 11px; padding: 3px 10px; cursor: pointer; background: transparent; color: #666; border: none; border-right: 0.5px solid rgba(0,0,0,0.12); font-family: inherit; }
+  .stab:last-child { border-right: none; }
+  .stab.active { background: #1a1a18; color: #fff; }
+  .stab:hover:not(.active) { background: #f5f5f3; }
+  .price-val { font-size: 28px; font-weight: 500; line-height: 1.2; }
+  .price-sub { font-size: 11px; color: #888; margin-top: 2px; }
+  .note { font-size: 12px; padding: 8px 12px; border-radius: 8px; margin-top: 10px; border-left: 3px solid; line-height: 1.5; }
+  .n-amber { background: #FAEEDA; color: #854F0B; border-color: #BA7517; }
+  .n-blue  { background: #E6F1FB; color: #185FA5; border-color: #378ADD; }
+  .n-green { background: #EAF3DE; color: #3B6D11; border-color: #639922; }
+  .vlist { margin-top: 12px; }
+  .vrow { font-size: 12px; color: #555; padding: 5px 0; border-bottom: 0.5px solid rgba(0,0,0,0.08); }
+  .vrow:last-child { border-bottom: none; }
+  .vrow-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .vflag  { font-size: 11px; color: #999; white-space: nowrap; }
+  .vcaveat { font-size: 11px; color: #888; margin-top: 3px; font-style: italic; line-height: 1.4; }
+  .macr-bar { display: flex; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 8px; overflow: hidden; margin-bottom: 0.75rem; }
+  .macr-cell { flex: 1; padding: 7px 4px; text-align: center; border-right: 0.5px solid rgba(0,0,0,0.08); }
+  .macr-cell:last-child { border-right: none; }
+  .macr-cell.cur { background: #f5f5f3; }
+  .macr-cell .my { font-size: 10px; color: #999; margin-bottom: 2px; }
+  .macr-cell .mv { font-size: 13px; font-weight: 500; }
+  table { width: 100%; font-size: 12px; border-collapse: collapse; }
+  td, th { padding: 6px 8px; text-align: left; border-bottom: 0.5px solid rgba(0,0,0,0.08); }
+  th { color: #888; font-weight: 400; font-size: 11px; }
+  .hrow td { font-weight: 500; background: #f9f9f7; }
+  .na { color: #bbb; font-style: italic; }
+  .admin-toggle { font-size: 13px; color: #888; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; display: inline-block; background: none; border: none; font-family: inherit; padding: 0; }
+  .admin-toggle:hover { color: #1a1a18; }
+  .admin-panel { display: none; }
+  .admin-panel.open { display: block; margin-top: 1rem; }
+  .cr { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .cr span { font-size: 12px; color: #666; min-width: 36px; }
+  .sfrow { display: flex; align-items: center; gap: 12px; }
+  .sfrow input[type=range] { flex: 1; }
+  .sfval { font-size: 20px; font-weight: 500; min-width: 48px; }
+  .header-strip { padding-bottom: 1.25rem; border-bottom: 0.5px solid rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
+  .header-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 5px; }
+  .method-note { font-size: 11px; color: #bbb; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header-strip">
+    <h1>H2 2026 Energy Storage Price Book</h1>
+    <div class="header-meta">
+      <p style="font-size:13px;color:#666;">Blended vendor pricing by compliance track · DC-block and AC-integrated · Forward curve through 2032</p>
+      <button class="admin-toggle" onclick="toggleAdmin()">⚙ Edit pricing inputs</button>
+    </div>
+  </div>
+
+  <div class="admin-panel" id="adminPanel">
+    <div class="card">
+      <p style="font-size:13px;color:#666;margin-bottom:1rem;">Base prices reflect 30th percentile of surveyed vendors. Utility scale prices entered directly where vendor data is available; fallback factor applied otherwise. Leave at 0 if scope not applicable.</p>
+
+      <p style="font-size:12px;font-weight:500;margin-bottom:8px;">Chinese / non-FEOC</p>
+      <div class="row2" style="margin-bottom:0.5rem;">
+        <div><label>DG · DC-block ($/kWh)</label><input type="number" id="dg_pC_dc" value="155" step="1" oninput="recalc()"></div>
+        <div><label>DG · AC-integrated ($/kWh)</label><input type="number" id="dg_pC_ac" value="164" step="1" oninput="recalc()"></div>
+      </div>
+      <div class="row2" style="margin-bottom:1rem;">
+        <div><label>Utility · DC-block ($/kWh)</label><input type="number" id="ut_pC_dc" value="155" step="1" oninput="recalc()"></div>
+        <div><label>Utility · AC-integrated ($/kWh)</label><input type="number" id="ut_pC_ac" value="150" step="1" oninput="recalc()"></div>
+      </div>
+
+      <p style="font-size:12px;font-weight:500;margin-bottom:8px;">FEOC-compliant</p>
+      <div class="row2" style="margin-bottom:0.5rem;">
+        <div><label>DG · DC-block ($/kWh)</label><input type="number" id="dg_pF_dc" value="160" step="1" oninput="recalc()"></div>
+        <div><label>DG · AC-integrated ($/kWh)</label><input type="number" id="dg_pF_ac" value="0" step="1" oninput="recalc()"></div>
+      </div>
+      <div class="row2" style="margin-bottom:1rem;">
+        <div><label>Utility · DC-block ($/kWh)</label><input type="number" id="ut_pF_dc" value="148" step="1" oninput="recalc()"></div>
+        <div><label>Utility · AC-integrated ($/kWh)</label><input type="number" id="ut_pF_ac" value="0" step="1" oninput="recalc()"></div>
+      </div>
+
+      <p style="font-size:12px;font-weight:500;margin-bottom:8px;">Domestic content</p>
+      <div class="row2" style="margin-bottom:0.5rem;">
+        <div><label>DG · DC-block ($/kWh)</label><input type="number" id="dg_pDC_dc" value="196" step="1" oninput="recalc()"></div>
+        <div><label>DG · AC-integrated ($/kWh)</label><input type="number" id="dg_pDC_ac" value="220" step="1" oninput="recalc()"></div>
+      </div>
+      <div class="row2" style="margin-bottom:1rem;">
+        <div><label>Utility · DC-block ($/kWh)</label><input type="number" id="ut_pDC_dc" value="161" step="1" oninput="recalc()"></div>
+        <div><label>Utility · AC-integrated ($/kWh)</label><input type="number" id="ut_pDC_ac" value="185" step="1" oninput="recalc()"></div>
+      </div>
+
+      <div class="row2" style="margin-bottom:0;">
+        <div><label>Pricing source / vintage</label><input type="text" id="priceSource" value="Internal survey, Apr 2026" oninput="recalc()"></div>
+        <div><label>Last reviewed</label><input type="text" id="lastReviewed" value="April 15, 2026" oninput="recalc()"></div>
+      </div>
+
+      <hr class="divider">
+      <p style="font-size:13px;color:#666;margin-bottom:6px;">Utility scale fallback factor</p>
+      <p style="font-size:12px;color:#999;margin-bottom:0.75rem;">Applied only where no direct utility price is entered above.</p>
+      <div class="sfrow">
+        <span style="font-size:13px;color:#666;">Utility = DG ×</span>
+        <input type="range" id="scaleFactor" min="50" max="100" value="75" step="1" oninput="document.getElementById('sfval').textContent=this.value+'%';recalc();">
+        <span class="sfval" id="sfval">75%</span>
+      </div>
+
+      <hr class="divider">
+      <p style="font-size:13px;color:#666;margin-bottom:4px;">Forward curve multipliers</p>
+      <p style="font-size:12px;color:#999;margin-bottom:0.75rem;">2027 = 1.00 base · −3%/yr (Bloomberg NEF)</p>
+      <div id="curveInputs"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem;">
+    <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+      <div>
+        <label style="margin-bottom:4px;">Business line</label>
+        <div class="seg-tabs">
+          <button class="seg-tab active" onclick="setSeg('dg',this)">DG · 5MW / 20MWh</button>
+          <button class="seg-tab" onclick="setSeg('util',this)">Utility · 200MW / 800MWh</button>
+        </div>
+      </div>
+      <div>
+        <label style="margin-bottom:4px;">Delivery year</label>
+        <div class="year-tabs" id="yearTabs"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tracks-grid" id="trackCards"></div>
+
+  <div class="card">
+    <p style="font-size:13px;color:#666;margin-bottom:0.75rem;">MACR thresholds — minimum non-FEOC cost share for ITC eligibility</p>
+    <div class="macr-bar" id="macrBar"></div>
+    <p style="font-size:11px;color:#999;">Per IRS Notice 2026-15. Battery cells carry 52% component cost weight — any Chinese cell sourcing fails all thresholds.</p>
+  </div>
+
+  <div class="card">
+    <p style="font-size:13px;color:#666;margin-bottom:0.75rem;">Multi-year forward pricing — <span id="tableSegLabel"></span></p>
+    <table><thead id="tHead"></thead><tbody id="tBody"></tbody></table>
+    <p style="font-size:11px;color:#999;margin-top:10px;" id="srcLabel"></p>
+    <p class="method-note">Blended prices reflect 30th percentile of surveyed vendors. Forward curve: −3%/yr from 2027 base (Bloomberg NEF). Utility scale from direct vendor data where available; 75% fallback factor otherwise.</p>
+  </div>
+
+</div>
+<script>
+const YEARS=[2026,2027,2028,2029,2030,2031,2032];
+const MACR={2026:55,2027:60,2028:65,2029:70,2030:75,2031:75,2032:75};
+let mults={2026:1.03,2027:1.00,2028:0.97,2029:0.94,2030:0.91,2031:0.88,2032:0.85};
+let selYear=2027, seg='dg';
+let tScopes={chinese:'dc',feoc:'dc',dc:'ac'};
+
+const vendors={
+  chinese:[
+    {name:'CATL EnerX',          flag:'CN', scope:'dc', risk:'high', caveat:'Designated SFE. Safe-harbored projects only; licensing deals face "effective control" scrutiny. Price fixed at $175/kWh.'},
+    {name:'Hithium InfiniBlock',  flag:'CN', scope:'dc', risk:'high', caveat:'Designated SFE. Aggressive US inventory pricing but binary ITC risk.'},
+    {name:'Gotion',               flag:'CN', scope:'dc', risk:'high', caveat:'Designated SFE. Michigan plant canceled; Illinois expansion remains PFE-owned.'},
+    {name:'Rise/SYL',              flag:'CN', scope:'dc', risk:'high', caveat:'Designated SFE. Competitive pricing but carries same binary ITC risk as all Chinese-origin product.'},
+    {name:'Sungrow',              flag:'CN', scope:'ac', risk:'high', caveat:'Chinese HQ and 52% PFE cell weighting. Non-compliant for ITC from 2026 onward.'},
+  ],
+  feoc:[
+    {name:'Samsung SDI',                  flag:'KR', scope:'dc', risk:'low',  caveat:'30GWh US capacity targeted for 2026. Only non-Chinese prismatic LFP manufacturer in the US.'},
+    {name:'SK On',                        flag:'KR', scope:'dc', risk:'low',  caveat:'Dedicated LFP ESS line in Georgia from Oct 2026. EIS thermal detection differentiator.'},
+    {name:'Canadian Solar / E-Storage',   flag:'CA', scope:'dc', risk:'med',  caveat:'Restructured to Canadian ownership. KY plant up to 6GWh. Cell-level risk if global supply chain used.'},
+    {name:'Saft (TotalEnergies)',         flag:'FR', scope:'ac', risk:'low',  caveat:'Jacksonville FL plant; 4.8M cells/yr. US-made Intensium containers. DOE-backed. Pricing not provided.'},
+  ],
+  dc:[
+    {name:'LG ES Vertech',      flag:'US/KR', scope:'ac', risk:'low',  caveat:'50GWh US capacity ramp by late 2026. Vertical integration from cells to software. Premier DC-eligible option.'},
+    {name:'QCells OmniSkid',    flag:'US/KR', scope:'ac', risk:'low',  caveat:'Uses LG ES cells. Specifically designed for 40% ITC. Georgia manufacturing stronghold.'},
+    {name:'Tesla Megapack',     flag:'US',    scope:'ac', risk:'med',  caveat:'Some tax equity partners declining DC approval due to potential CATL cell usage. Cell transparency risk.'},
+    {name:'Fluence Gridstack',  flag:'US',    scope:'ac', risk:'med',  caveat:'~50% of cells from AESC (Envision) — a designated SFE. Actively negotiating a second US cell supply deal.'},
+    {name:'Hithium Infini Block',flag:'CN',   scope:'dc', risk:'high', caveat:'Designated SFE — domestic content claim requires full supply chain audit. High compliance risk.'},
+    {name:'Gotion (DC)',         flag:'CN',   scope:'dc', risk:'high', caveat:'Designated SFE — domestic content claim requires full supply chain audit. High compliance risk.'},
+  ]
+};
+
+const TMETA={
+  chinese:{label:'Chinese / non-FEOC',tc:'t-cn',  nc:'n-amber',note:'Safe-harbored projects only. All vendors carry SFE designation or high PFE cell risk. Binary ITC loss on non-safe-harbored projects.'},
+  feoc:   {label:'FEOC-compliant',    tc:'t-feoc',nc:'n-blue', note:'Full 30% ITC eligible. Verify MACR threshold is met for the project construction year. DC adder not available.'},
+  dc:     {label:'Domestic content',  tc:'t-dc',  nc:'n-green',note:'30% ITC + 10% DC adder = 40% effective ITC. Confirm DC eligibility and cell sourcing transparency per vendor and project.'}
+};
+
+const IDS={
+  dg: {chinese:{dc:'dg_pC_dc',ac:'dg_pC_ac'},feoc:{dc:'dg_pF_dc',ac:'dg_pF_ac'},dc:{dc:'dg_pDC_dc',ac:'dg_pDC_ac'}},
+  util:{chinese:{dc:'ut_pC_dc',ac:'ut_pC_ac'},feoc:{dc:'ut_pF_dc',ac:'ut_pF_ac'},dc:{dc:'ut_pDC_dc',ac:'ut_pDC_ac'}}
+};
+
+function getBase(track,scope){ return +document.getElementById(IDS[seg][track][scope]).value||0; }
+function effPrice(track,scope,year){ const b=getBase(track,scope); if(!b) return null; return Math.round(b*(mults[year]||1)); }
+function getAvail(track){ return {dc:getBase(track,'dc')>0,ac:getBase(track,'ac')>0}; }
+function riskBadge(r){ const m={low:['risk-low','Low risk'],med:['risk-med','Med risk'],high:['risk-high','High risk']}; const [c,l]=m[r]||m.med; return `<span class="${c}">${l}</span>`; }
+
+function setSeg(s,el){ seg=s; document.querySelectorAll('.seg-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); recalc(); }
+
+function buildYearTabs(){
+  const c=document.getElementById('yearTabs'); c.innerHTML='';
+  YEARS.forEach(y=>{ const b=document.createElement('button'); b.className='ytab'+(y===selYear?' active':''); b.textContent=y; b.onclick=()=>{selYear=y;buildYearTabs();recalc();}; c.appendChild(b); });
+}
+
+function buildCurveInputs(){
+  const c=document.getElementById('curveInputs'); c.innerHTML='';
+  YEARS.forEach(y=>{ const r=document.createElement('div'); r.className='cr'; r.innerHTML=`<span>${y}</span><input type="number" value="${mults[y]}" step="0.01" min="0.5" max="2" style="max-width:90px;" oninput="mults[${y}]=+this.value;recalc();"><span style="font-size:12px;color:#999;">×</span>`; c.appendChild(r); });
+}
+
+function buildMACR(){
+  const c=document.getElementById('macrBar'); c.innerHTML='';
+  YEARS.slice(0,6).forEach(y=>{ c.innerHTML+=`<div class="macr-cell${y===selYear?' cur':''}"><div class="my">${y}</div><div class="mv">${MACR[y]}%</div></div>`; });
+}
+
+function resolveScope(track){
+  const av=getAvail(track);
+  if(!av.dc&&!av.ac) return null;
+  if(!av.dc){ tScopes[track]='ac'; return 'ac'; }
+  if(!av.ac){ tScopes[track]='dc'; return 'dc'; }
+  if(!tScopes[track]||!av[tScopes[track]]) tScopes[track]='dc';
+  return tScopes[track];
+}
+
+function renderCards(){
+  const c=document.getElementById('trackCards'); c.innerHTML='';
+  ['chinese','feoc','dc'].forEach(track=>{
+    const m=TMETA[track], sc=resolveScope(track), av=getAvail(track), both=av.dc&&av.ac, price=sc?effPrice(track,sc,selYear):null;
+    let scopeUI='';
+    if(both){ scopeUI=`<div class="scope-tabs"><button class="stab${sc==='dc'?' active':''}" onclick="tScopes['${track}']='dc';recalc();">DC block</button><button class="stab${sc==='ac'?' active':''}" onclick="tScopes['${track}']='ac';recalc();">AC integrated</button></div>`; }
+    else if(sc){ scopeUI=`<div style="margin:8px 0;"><span class="sbadge ${sc==='dc'?'s-dc':'s-ac'}">${sc==='dc'?'DC-block only':'AC-integrated'}</span></div>`; }
+    const filtV=sc?vendors[track].filter(v=>v.scope===sc):[];
+    const vHTML=filtV.length?filtV.map(v=>`<div class="vrow"><div class="vrow-top"><span style="font-weight:500;">${v.name}</span><div style="display:flex;align-items:center;gap:5px;">${riskBadge(v.risk)}<span class="vflag">${v.flag}</span></div></div><div class="vcaveat">${v.caveat}</div></div>`).join(''):`<div style="padding:6px 0;font-size:12px;color:#aaa;font-style:italic;">None listed for this scope</div>`;
+    c.innerHTML+=`<div class="track-card"><div style="margin-bottom:4px;"><span class="tbadge ${m.tc}">${m.label}</span></div>${scopeUI}${price!=null?`<div class="price-val">$${price}</div><div class="price-sub">$/kWh · ${sc==='dc'?'DC-block only':'AC-integrated'} · ${selYear} delivery</div>`:`<div style="font-size:14px;color:#aaa;padding:8px 0;">Not available</div>`}<div class="note ${m.nc}">${m.note}</div><div class="vlist"><p style="font-size:11px;color:#aaa;margin-bottom:4px;">Representative vendors</p>${vHTML}</div></div>`;
+  });
+}
+
+function buildTable(){
+  const tracks=['chinese','feoc','dc'];
+  document.getElementById('tableSegLabel').textContent=seg==='dg'?'DG · 5MW / 20MWh':'Utility · 200MW / 800MWh';
+  let th='<tr><th>Year</th>';
+  tracks.forEach(t=>{ const sc=tScopes[t]; th+=`<th>${TMETA[t].label}${sc?' ('+(sc==='dc'?'DC':'AC')+')':''}</th>`; });
+  th+='<th>MACR req.</th><th>Curve ×</th></tr>';
+  document.getElementById('tHead').innerHTML=th;
+  const tb=document.getElementById('tBody'); tb.innerHTML='';
+  YEARS.forEach(y=>{
+    const tr=document.createElement('tr'); if(y===selYear) tr.className='hrow';
+    let tds=`<td>${y}</td>`;
+    tracks.forEach(t=>{ const sc=tScopes[t]; const p=sc?effPrice(t,sc,y):null; tds+=`<td>${p!=null?'$'+p:'<span class="na">n/a</span>'}</td>`; });
+    tds+=`<td>${MACR[y]||75}%</td><td>${(mults[y]||1).toFixed(2)}×</td>`;
+    tr.innerHTML=tds; tb.appendChild(tr);
+  });
+  document.getElementById('srcLabel').textContent=`Source: ${document.getElementById('priceSource').value} · Last reviewed: ${document.getElementById('lastReviewed').value} · All prices $/kWh`;
+}
+
+function recalc(){ renderCards(); buildTable(); buildMACR(); }
+function toggleAdmin(){ document.getElementById('adminPanel').classList.toggle('open'); }
+
+buildYearTabs(); buildCurveInputs(); recalc();
+</script>
+</body>
+</html>
